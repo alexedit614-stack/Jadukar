@@ -1,1 +1,75 @@
-<html><body><script>&lt;!DOCTYPE html&gt;<br/>&lt;html lang=&quot;hi&quot;&gt;<br/>&lt;head&gt;<br/>    &lt;meta charset=&quot;UTF-8&quot;&gt;<br/>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;<br/>    &lt;title&gt;Pro Color Trade&lt;/title&gt;<br/>    &lt;style&gt;<br/>        body { font-family: Arial; background: #f4f4f4; text-align: center; margin: 0; }<br/>        .header { background: #007bff; color: white; padding: 20px; font-size: 24px; }<br/>        .wallet-card { background: white; margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }<br/>        .btn-container { display: flex; justify-content: space-around; margin: 20px; }<br/>        .btn { padding: 15px 30px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; }<br/>        .green { background: #28a745; }<br/>        .red { background: #dc3545; }<br/>        .violet { background: #6f42c1; }<br/>        .timer { font-size: 40px; color: #333; margin: 20px; }<br/>    &lt;/style&gt;<br/>&lt;/head&gt;<br/>&lt;body&gt;<div></div>&lt;div class=&quot;header&quot;&gt;Pro Color Trader&lt;/div&gt;<div></div>&lt;div class=&quot;wallet-card&quot;&gt;<br/>    &lt;p&gt;उपलब्ध बैलेंस (Available Balance)&lt;/p&gt;<br/>    &lt;h2&gt;₹ 0.00&lt;/h2&gt;<br/>&lt;/div&gt;<div></div>&lt;div class=&quot;timer&quot; id=&quot;timer&quot;&gt;03:00&lt;/div&gt;<div></div>&lt;div class=&quot;btn-container&quot;&gt;<br/>    &lt;button class=&quot;btn green&quot; onclick=&quot;bet(&#39;Green&#39;)&quot;&gt;Join Green&lt;/button&gt;<br/>    &lt;button class=&quot;btn violet&quot; onclick=&quot;bet(&#39;Violet&#39;)&quot;&gt;Join Violet&lt;/button&gt;<br/>    &lt;button class=&quot;btn red&quot; onclick=&quot;bet(&#39;Red&#39;)&quot;&gt;Join Red&lt;/button&gt;<br/>&lt;/div&gt;<div></div>&lt;script&gt;<br/>    // सरल टाइमर<br/>    let time = 180;<br/>    setInterval(() =&gt; {<br/>        let mins = Math.floor(time / 60);<br/>        let secs = time % 60;<br/>        document.getElementById(&#39;timer&#39;).innerHTML = <br/>            (mins &lt; 10 ? &#39;0&#39; : &#39;&#39;) + mins + &quot;:&quot; + (secs &lt; 10 ? &#39;0&#39; : &#39;&#39;) + secs;<br/>        if(time == 0) time = 180; else time--;<br/>    }, 1000);<div></div>    function bet(color) {<br/>        alert(color + &quot; पर दांव लगाने के लिए कृपया लॉगिन करें!&quot;);<br/>    }<br/>&lt;/script&gt;<div></div>&lt;/body&gt;<br/>&lt;/html&gt;<br/></script></body></
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiranga Official - Live OTP Server</title>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
+
+    <style>
+        :root { --bg: #050a14; --card: #1b2644; --gold: #ffc107; --green: #00c853; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; text-align: center; }
+        .box { background: var(--card); margin: 50px auto; width: 85%; padding: 25px; border-radius: 20px; border: 1px solid #2a3a6a; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: #fff; }
+        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 30px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #recaptcha-container { margin: 10px auto; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-screen">
+        <div class="box">
+            <h2 style="color:var(--gold)">TIRANGA LOGIN</h2>
+            <p>Enter number to receive OTP</p>
+            <input type="number" id="phone" placeholder="Mobile Number">
+            <div id="recaptcha-container"></div>
+            <button class="btn" onclick="sendOTP()">Send OTP</button>
+
+            <div id="otp-area" style="display:none; margin-top:20px;">
+                <input type="number" id="otp" placeholder="Enter 6-Digit OTP">
+                <button class="btn" style="background:var(--green); color:white;" onclick="verifyOTP()">Login Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-screen" style="display:none;">
+        <h1 style="color:var(--gold); margin-top:50px;">Welcome to Tiranga!</h1>
+        <p>Login Successful. Your balance: ₹500.00</p>
+        <button class="btn" onclick="location.reload()" style="width:50%">Logout</button>
+    </div>
+
+    <script>
+        // AAPKA ASLI CONFIG CODE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAKNfkfO3NB3FBVmNRZOmHpRlRgYH9BObo",
+            authDomain: "win-jan.firebaseapp.com",
+            projectId: "win-jan",
+            storageBucket: "win-jan.firebasestorage.app",
+            messagingSenderId: "395755624743",
+            appId: "1:395755624743:web:72f435711a7681b9a4f102"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        function sendOTP() {
+            const phone = "+91" + document.getElementById('phone').value;
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+            
+            firebase.auth().signInWithPhoneNumber(phone, window.recaptchaVerifier)
+                .then(confirmationResult => {
+                    window.confirmationResult = confirmationResult;
+                    document.getElementById('otp-area').style.display = 'block';
+                    alert("OTP has been sent to " + phone);
+                }).catch(err => alert("Error: " + err.message));
+        }
+
+        function verifyOTP() {
+            const code = document.getElementById('otp').value;
+            confirmationResult.confirm(code).then(() => {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('game-screen').style.display = 'block';
+            }).catch(() => alert("Invalid OTP!"));
+        }
+    </script>
+</body>
+</html>
